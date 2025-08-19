@@ -1,0 +1,11 @@
+app:
+  image:
+    repository: hieu049087/ader
+    tag: 1.0
+  network:
+    http:
+      ingress:
+        host: ader.baloise.dev
+  deployment:
+    strategy:
+      type: Recreate

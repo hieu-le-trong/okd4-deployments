@@ -1,7 +1,7 @@
 app:
   image:
     repository: hieu049087/ader
-    tag: 1.0
+    tag: 2.0
   network:
     http:
       ingress:

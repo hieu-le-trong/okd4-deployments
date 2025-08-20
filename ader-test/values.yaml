@@ -5,7 +5,7 @@ app:
   network:
     http:
       ingress:
-        host: ader-test.baloise.dev
+        host: ader.baloise.dev
       volumeMounts:
         - mountPath: /etc/nginx/conf.d/
           name: nginx-dir

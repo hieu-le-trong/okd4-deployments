@@ -1,25 +1,13 @@
-{{- if .Values.app.network.http.ingress.enabled }}
 {{- if .Values.dnsEndpoint.enabled }}
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
 metadata:
   name: {{ .Release.Name }}-dns-endpoint
   namespace: {{ .Release.Namespace }}
-  labels:
-    {{- include "app.labels" . | nindent 4 }}
-    component: dns
-  annotations:
-    description: "External DNS endpoint for JWT Token Manager"
 spec:
   endpoints:
     - dnsName: {{ .Values.app.network.http.ingress.host }}
       recordType: A
-      recordTTL: {{ .Values.dnsEndpoint.recordTTL | default 180 }}
+      recordTTL: {{ .Values.dnsEndpoint.recordTTL }}
       targets: [""]
-      {{- if .Values.app.network.http.ingress.annotations }}
-      labels:
-        ingress: "true"
-        app: {{ .Values.app.name }}
-      {{- end }}
-{{- end }}
 {{- end }}

@@ -1,0 +1,19 @@
+app:
+  image:
+    repository: hieuletrong368/toge
+    tag: 1.0
+  network:
+    http:
+      ingress:
+        host: toge.baloise.dev
+      volumeMounts:
+        - mountPath: /etc/nginx/conf.d/
+          name: nginx-dir
+        - mountPath: /var/cache/nginx/client_temp
+          name: nginx-empty
+        - mountPath: /var/run/
+          name: nginx-run
+
+  deployment:
+    strategy:
+      type: Recreate

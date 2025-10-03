@@ -1,14 +1,8 @@
 apiVersion: v2
-name: hieuletrong368-toge-test
-description: A Helm chart for deploying the Toge Next.js application
-type: application
 version: 1.0.0
-appVersion: "1.0"
-maintainers:
-  - name: hieu-le-trong
-    email: hieu.le.trong@baloise.com
+name: hieuletrong368-toge-test
 dependencies:
-  - name: generic-chart
+  - name:  generic-chart
     version: 2.3.0
     repository: https://baloise-incubator.github.io/generic-chart/
     alias: app

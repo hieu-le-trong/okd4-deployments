@@ -1,19 +1,105 @@
 app:
+  # Container image configuration
   image:
     repository: hieuletrong368/toge
     tag: 1.0
+    pullPolicy: IfNotPresent
+  
+  # Service configuration
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 3000  # Node.js app port from Dockerfile
+  
+  # Network configuration with ingress annotations
   network:
     http:
       ingress:
+        enabled: true
         host: toge.baloise.dev
-      volumeMounts:
-        - mountPath: /etc/nginx/conf.d/
-          name: nginx-dir
-        - mountPath: /var/cache/nginx/client_temp
-          name: nginx-empty
-        - mountPath: /var/run/
-          name: nginx-run
-
+        port: 80
+        annotations:
+          nginx.ingress.kubernetes.io/ssl-redirect: "true"
+          nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+  
+  # Security context for OpenShift compatibility
+  securityContext:
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
+    capabilities:
+      drop:
+        - ALL
+  
+  # Pod security context
+  podSecurityContext:
+    runAsUser: 1001
+    runAsGroup: 1001
+    fsGroup: 1001
+  
+  # Resource limits
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  
+  # Health checks
+  livenessProbe:
+    httpGet:
+      path: /api/health
+      port: 3000
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  
+  readinessProbe:
+    httpGet:
+      path: /api/health
+      port: 3000
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 3
+  
+  # Environment variables
+  env:
+    - name: NODE_ENV
+      value: "production"
+    - name: NEXT_TELEMETRY_DISABLED
+      value: "1"
+    - name: PORT
+      value: "3000"
+    - name: HOSTNAME
+      value: "0.0.0.0"
+  
+  # Deployment strategy
   deployment:
     strategy:
-      type: Recreate
+      type: RollingUpdate
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 0
+    replicas: 1
+  
+  # Optional: Enable nginx reverse proxy
+  nginx:
+    enabled: false  # Set to true if you want to use nginx as reverse proxy
+    
+  # Optional: Enable monitoring
+  monitoring:
+    enabled: false  # Set to true if you want to enable ServiceMonitor
+  
+  # Node selector for deployment
+  nodeSelector: {}
+  
+  # Tolerations for deployment
+  tolerations: []
+  
+  # Affinity rules
+  affinity: {}

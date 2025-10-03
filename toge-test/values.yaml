@@ -1,7 +1,7 @@
 app:
   image:
     repository: hieuletrong368/toge
-    tag: 1.0
+    tag: 2
   network:
     http:
       ingress:

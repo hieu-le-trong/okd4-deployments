@@ -9,3 +9,7 @@ app:
   deployment:
     strategy:
       type: Recreate
+
+dnsEndpoint:
+  enabled: true
+  recordTTL: 180
